@@ -20,11 +20,11 @@ open class DefaultBubble: Bubble {
     //MARK: Public Variables
     
     /** Radius of the corners for the bubble. When this is set, you will need to call setNeedsLayout on your message for changes to take effect if the bubble has already been drawn*/
-    open var radius : CGFloat = 16
+    open var radius : CGFloat = 12
     /** Should be less or equal to the *radius* property. When this is set, you will need to call setNeedsLayout on your message for changes to take effect if the bubble has already been drawn*/
-    open var borderWidth : CGFloat = 0 //TODO:
+//    open var borderWidth : CGFloat = 1 //TODO:
     /** The color of the border around the bubble. When this is set, you will need to call setNeedsLayout on your message for changes to take effect if the bubble has already been drawn*/
-    open var bubbleBorderColor : UIColor = UIColor.clear
+    open var bubbleBorderColor : UIColor = UIColor.n1LighterGreyColor()
     /** Path used to cutout the bubble*/
     open fileprivate(set) var path: CGMutablePath = CGMutablePath()
     
@@ -63,16 +63,9 @@ open class DefaultBubble: Bubble {
         }
         
         path = CGMutablePath()
-    
-        path.addArc(center: CGPoint(x: rect.maxX, y: rect.minY), radius: radius2, startAngle: CGFloat(-Double.pi/2), endAngle: 0, clockwise: false)
-        path.addLine(to: CGPoint(x: rect.maxX + radius2, y: rect.maxY + radius2))
-        path.addArc(center: CGPoint(x: rect.minX, y: rect.maxY), radius: radius2, startAngle: CGFloat(Double.pi/2), endAngle: CGFloat(Double.pi), clockwise: false)
-        path.addArc(center: CGPoint(x: rect.minX, y: rect.minY), radius: radius2, startAngle: CGFloat(Double.pi), endAngle: CGFloat(-Double.pi/2), clockwise: false)
-    
-        //CGPathAddArc(path, nil, rect.maxX, rect.minY, radius2, CGFloat(-M_PI_2), 0, false)
-        //CGPathAddLineToPoint(path, nil, rect.maxX + radius2, rect.maxY + radius2)
-        //CGPathAddArc(path, nil, rect.minX, rect.maxY, radius2, CGFloat(M_PI_2), CGFloat(M_PI), false)
-        //CGPathAddArc(path, nil, rect.minX, rect.minY, radius2, CGFloat(M_PI), CGFloat(-M_PI_2), false)
+
+        path.addRoundedRect(in: CGRect.init(x: rect.minX - radius2, y: rect.minY - radius2, width: rect.size.width + 2 * radius2, height: rect.size.height + 2 * radius2), cornerWidth: radius2, cornerHeight: radius2)
+
         path.closeSubpath()
     }
     

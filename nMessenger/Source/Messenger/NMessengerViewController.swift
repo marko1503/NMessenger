@@ -43,6 +43,9 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
     //This is input view
     open var inputBarView: InputBarView!
     
+    open var statusView: UIView!
+    open var statusViewHeight: NSLayoutConstraint = NSLayoutConstraint()
+    
     //MARK: Private Variables
     //Bool to indicate if the keyboard is open
     open fileprivate(set) var isKeyboardIsShown : Bool = false
@@ -118,6 +121,7 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
         //load views
         loadMessengerView()
         loadInputView()
+        loadStatusView()
         setUpConstraintsForViews()
         //swipe down
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(NMessengerViewController.respondToSwipeGesture(_:)))
@@ -136,6 +140,7 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
     fileprivate func loadMessengerView() {
         self.messengerView = NMessenger(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height - 63))
         messengerView.delegate = self
+        self.messengerView.messengerNode.contentInset = UIEdgeInsetsMake(0, 0, 63, 0)
         self.view.addSubview(self.messengerView)
     }
     /**
@@ -145,6 +150,13 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
     {
         self.inputBarView = self.getInputBar()
         self.view.addSubview(inputBarView)
+    }
+    
+    fileprivate func loadStatusView()
+    {
+        self.statusView = UIView()
+        self.statusView.backgroundColor = UIColor.clear
+        self.view.addSubview(self.statusView)
     }
     
     /**
@@ -167,11 +179,20 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
         self.view.addConstraint(NSLayoutConstraint(item: self.inputBarView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0))
         self.view.addConstraint(NSLayoutConstraint(item: inputBarView, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: self.inputBarView.frame.size.height))
         self.view.addConstraint(NSLayoutConstraint(item: inputBarView, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 43))
+        
+        self.statusView.translatesAutoresizingMaskIntoConstraints = false
+        self.statusViewHeight = NSLayoutConstraint(item: statusView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 0)
+        self.view.addConstraint(self.statusViewHeight)
+        self.view.addConstraint(NSLayoutConstraint(item: self.statusView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: self.statusView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: self.statusView, attribute: .bottom, relatedBy: .equal, toItem: inputBarView, attribute: .top, multiplier: 1.0, constant: 0))
+        
         self.messengerView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraint(NSLayoutConstraint(item: self.messengerView, attribute: .top, relatedBy: .equal, toItem: self.topLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0))
         self.view.addConstraint(NSLayoutConstraint(item: self.messengerView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0))
         self.view.addConstraint(NSLayoutConstraint(item: self.messengerView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0))
-        self.view.addConstraint(NSLayoutConstraint(item: self.messengerView, attribute: .bottom, relatedBy: .equal, toItem: inputBarView, attribute: .top, multiplier: 1.0, constant: 0))
+        self.view.addConstraint(NSLayoutConstraint(item: self.messengerView, attribute: .bottom, relatedBy: .equal, toItem: self.inputBarView, attribute: .bottom, multiplier: 1.0, constant: 0))
+//        self.view.addConstraint(NSLayoutConstraint(item: self.messengerView, attribute: .bottom, relatedBy: .equal, toItem: self.bottomLayoutGuide, attribute: .top, multiplier: 1.0, constant: 0))
     }
     
     open override var shouldAutorotate: Bool {
@@ -354,12 +375,31 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
      - parameter isIncomingMessage: if message is incoming or outgoing
      - returns: the newly created message
      */
-    open func createTextMessage(_ text: String, isIncomingMessage:Bool) -> GeneralMessengerCell {
+    open func createTextMessage(_ text: String, isIncomingMessage:Bool, state: ContentNodeState = .none) -> GeneralMessengerCell {
         let textContent = TextContentNode(textMessageString: text, currentViewController: self, bubbleConfiguration: self.sharedBubbleConfiguration)
         let newMessage = MessageNode(content: textContent)
+        let fontAndSizeAndTextColor = [ NSAttributedStringKey.font: UIFont.n1TextStyle3MiniFont(),
+                                        NSAttributedStringKey.foregroundColor: UIColor.n1LightGreyColor()]
+        if isIncomingMessage{
+            let avatar = ASImageNode()
+            avatar.backgroundColor = UIColor.lightGray
+            avatar.style.preferredSize = CGSize(width: 26, height: 26)
+            avatar.layer.cornerRadius = 13
+            newMessage.avatarNode = avatar
+            
+            let header = ASTextNode()
+            header.attributedText = NSAttributedString.init(string: "Jerome Reynolds", attributes: fontAndSizeAndTextColor)
+            newMessage.headerNode = header
+        }
+        
+        let footer = ASTextNode()
+        footer.attributedText = NSAttributedString.init(string: "23h 2m", attributes: fontAndSizeAndTextColor)
+        newMessage.footerNode = footer
+        
         newMessage.cellPadding = messagePadding
         newMessage.currentViewController = self
         newMessage.isIncomingMessage = isIncomingMessage
+        newMessage.state = state
         
         return newMessage
     }
@@ -370,8 +410,8 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
      - parameter isIncomingMessage: if message is incoming or outgoing
      - returns: the newly created message
      */
-    fileprivate func postText(_ text: String, isIncomingMessage:Bool) -> GeneralMessengerCell {
-        let newMessage = createTextMessage(text, isIncomingMessage: isIncomingMessage)
+    fileprivate func postText(_ text: String, isIncomingMessage:Bool, state: ContentNodeState = .none) -> GeneralMessengerCell {
+        let newMessage = createTextMessage(text, isIncomingMessage: isIncomingMessage, state: state)
         self.addMessageToMessenger(newMessage)
         return newMessage
     }
@@ -501,7 +541,7 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
      */
     open func createCustomContentViewMessage(_ view: UIView, isIncomingMessage:Bool) -> GeneralMessengerCell {
         let customView = CustomContentNode(withCustomView: view, bubbleConfiguration: self.sharedBubbleConfiguration)
-        let newMessage = MessageNode(content: customView)
+        let newMessage = MessageCustomNode(content: customView)
         newMessage.cellPadding = messagePadding
         newMessage.currentViewController = self
         newMessage.isIncomingMessage = isIncomingMessage

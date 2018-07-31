@@ -22,7 +22,7 @@ open class StackedBubble: Bubble {
     /** Radius of the corners for the bubble. When this is set, you will need to call setNeedsLayout on your message for changes to take effect if the bubble has already been drawn*/
     open var radius : CGFloat = 16
     /** Should be less or equal to the *radius* property. When this is set, you will need to call setNeedsLayout on your message for changes to take effect if the bubble has already been drawn*/
-    open var borderWidth : CGFloat = 0
+//    open var borderWidth : CGFloat = 0
     /** The color of the border around the bubble. When this is set, you will need to call setNeedsLayout on your message for changes to take effect if the bubble has already been drawn*/
     open var bubbleBorderColor : UIColor = UIColor.clear
     /** Path used to cutout the bubble*/

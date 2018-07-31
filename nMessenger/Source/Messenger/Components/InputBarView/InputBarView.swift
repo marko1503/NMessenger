@@ -62,4 +62,12 @@ open class InputBarView: UIView, InputBarViewProtocol {
         super.init(coder: aDecoder)
     }
     
+    func setupBarView(){
+        self.textInputAreaView.layer.cornerRadius = 6
+        self.textInputAreaView.layer.shadowColor = UIColor.lightGray.cgColor
+        self.textInputAreaView.layer.shadowOffset = CGSize(width : 0.0, height: 3.0)
+        self.textInputAreaView.layer.shadowOpacity = 1.0
+        self.textInputAreaView.layer.shadowRadius = 6.0
+    }
+    
 }

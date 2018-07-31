@@ -37,7 +37,7 @@ extension UIFont {
     }
     
     class func n1B1Font() -> UIFont {
-        return UIFont.systemFont(ofSize: 16.0, weight: UIFont.Weight.regular)
+        return UIFont.init(name: "OpenSans", size: 16.0)!
     }
     
     class func n1TextStyle3Font() -> UIFont {
@@ -45,7 +45,7 @@ extension UIFont {
     }
     
     class func n1TextStyle3MiniFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 8.0, weight: UIFont.Weight.bold)
+        return UIFont.init(name: "OpenSans", size: 12.0)!
     }
     
     class func n1TextStyle2Font() -> UIFont {
@@ -61,7 +61,7 @@ extension UIFont {
     }
     
     class func n1CaptionFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.medium)
+        return UIFont.init(name: "OpenSans", size: 15.0)!
     }
 }
 

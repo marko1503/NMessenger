@@ -16,8 +16,17 @@ import AsyncDisplayKit
  Content node class for NMessenger.
  Define the content a a MessageNode or a MessageGroup
  */
+
+public enum ContentNodeState {
+    case none
+    case accept
+    case decline
+    case delivered
+    case canceled
+}
+
+
 open class ContentNode: ASDisplayNode {
-    
     // MARK: Public Parameters
     /** Bubble that defines the background for the message*/
     open var backgroundBubble: Bubble?
@@ -35,8 +44,37 @@ open class ContentNode: ASDisplayNode {
     open var isIncomingMessage = true {
         didSet {
             self.backgroundBubble?.bubbleColor = isIncomingMessage ? bubbleConfiguration.getIncomingColor() : bubbleConfiguration.getOutgoingColor()
-            
+            self.backgroundBubble?.borderWidth = isIncomingMessage ? (state == .none ? 1 : 0) : 0
             self.setNeedsLayout()
+        }
+    }
+    
+    open var state:ContentNodeState = .none {
+        didSet {
+            switch state{
+            case .accept:
+                self.backgroundBubble?.bubbleColor = bubbleConfiguration.getAcceptColor()
+                self.style.minHeight = ASDimension.init(unit: .points, value: 65)
+                self.backgroundBubble?.borderWidth = 0
+                self.setNeedsLayout()
+            case .decline:
+                self.backgroundBubble?.bubbleColor = bubbleConfiguration.getDeclineColor()
+                self.style.minHeight = ASDimension.init(unit: .points, value: 65)
+                self.backgroundBubble?.borderWidth = 0
+                self.setNeedsLayout()
+            case .delivered:
+                self.backgroundBubble?.bubbleColor = bubbleConfiguration.getDeliveredColor()
+                self.style.minHeight = ASDimension.init(unit: .points, value: 65)
+                self.backgroundBubble?.borderWidth = 0
+                self.setNeedsLayout()
+            case .canceled:
+                self.backgroundBubble?.bubbleColor = bubbleConfiguration.getCanceledColor()
+                self.style.minHeight = ASDimension.init(unit: .points, value: 65)
+                self.backgroundBubble?.borderWidth = 0
+                self.setNeedsLayout()
+            default:
+                break
+            }
         }
     }
     
@@ -71,7 +109,7 @@ open class ContentNode: ASDisplayNode {
         self.backgroundBubble = self.bubbleConfiguration.getBubble()
         
         self.backgroundBubble?.bubbleColor = isIncomingMessage ? bubbleConfiguration.getIncomingColor() : bubbleConfiguration.getOutgoingColor()
-        
+        self.backgroundBubble?.borderWidth = isIncomingMessage ? (state == .none ? 1 : 0) : 0
         self.setNeedsLayout()
     }
     

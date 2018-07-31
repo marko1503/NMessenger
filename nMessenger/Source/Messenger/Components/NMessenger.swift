@@ -58,6 +58,7 @@ open class NMessenger: UIView {
     
     /** ASTableView for messages*/
     open var messengerNode:ASTableNode = ASTableNode()
+    
     /** Holds a state for the amount of content and if the messenger is fetching or not */
     fileprivate var state: NMessengerState = .initialState
     /** Used internally to prevent unwrapping for every usage*/
@@ -111,7 +112,7 @@ open class NMessenger: UIView {
         messengerNode.dataSource = self
         
         messengerNode.setTuningParameters(ASRangeTuningParameters(leadingBufferScreenfuls: 2, trailingBufferScreenfuls: 1), for: .display)
-        
+        messengerNode.view.backgroundColor = UIColor.white
         messengerNode.view.separatorStyle = UITableViewCellSeparatorStyle.none
         messengerNode.view.allowsSelection = false
         messengerNode.view.showsVerticalScrollIndicator = false
@@ -299,6 +300,7 @@ open class NMessenger: UIView {
             DispatchQueue.main.async {
                 if let indexPath = self.messengerNode.indexPath(for: message) {
                     self.scrollToIndex((indexPath as NSIndexPath).row, inSection: (indexPath as NSIndexPath).section, atPosition: position, animated: animated)
+                    
                 }
                 //unlock the semaphore
                 self.state.messageLock.signal()

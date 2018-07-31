@@ -24,6 +24,7 @@ open class MessageSentIndicator: GeneralMessengerCell {
     }
     /** Loading text node*/
     open let text = ASTextNode()
+
     /** Sets the loading attributed text for the spinner. Defaults to *"Loading..."* */
     open var messageSentAttributedText:NSAttributedString? {
         set {
@@ -33,13 +34,20 @@ open class MessageSentIndicator: GeneralMessengerCell {
             return text.attributedText
         }
     }
+    
     open var messageSentText: String? {
         set {
+            print(self.view.frame)
+            let subline = UIView.init(frame: CGRect.init(x: 33, y: 33, width: UIScreen.main.bounds.width - 66, height: 1))
+            subline.backgroundColor = UIColor.init(red: 234.0/255.0, green: 239.0/255.0, blue: 244.0/255.0, alpha: 1)
+            self.view.addSubview(subline)
+            
+            
             text.attributedText = NSAttributedString(
                 string: newValue != nil ? newValue! : "",
                 attributes: [
-                    NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14),
-                    NSAttributedStringKey.foregroundColor: UIColor.lightGray,
+                    NSAttributedStringKey.font: UIFont.n1CaptionFont(),
+                    NSAttributedStringKey.foregroundColor: UIColor.n1LightGreyColor(),
                     NSAttributedStringKey.kern: -0.3
                 ])
             self.setNeedsLayout()
@@ -50,6 +58,7 @@ open class MessageSentIndicator: GeneralMessengerCell {
     
     public override init() {
         super.init()
+        self.style.height = ASDimension.init(unit: .points, value: 40)
         addSubnode(text)
     }
     

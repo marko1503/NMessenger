@@ -43,10 +43,14 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>$(PRODUCT_NAME) wants acceess to Photos</string>
-    <key>NSCameraUsageDescription</key>
-    <string>$(PRODUCT_NAME) wants acceess to Camera</string>
-
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) wants acceess to Photos</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) wants acceess to Camera</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>OpenSans-Regular.ttf</string>
+		<string>OpenSans-Semibold.ttf</string>
+	</array>
 </dict>
 </plist>

@@ -24,12 +24,16 @@ extension UIColor {
         return UIColor(red: 38.0 / 255.0, green: 50.0 / 255.0, blue: 56.0 / 255.0, alpha: 1)
     }
     
-    class func n1DarkGreyColor() -> UIColor {
-        return UIColor(red: 96.0 / 255.0, green: 125.0 / 255.0, blue: 139.0 / 255.0, alpha: 1)
+    class func n1RedColor() -> UIColor {
+        return UIColor(red: 255.0 / 255.0, green: 87.0 / 255.0, blue: 34.0 / 255.0, alpha: 1)
     }
     
-    class func n1WhiteColor() -> UIColor {
-        return UIColor(white: 255.0 / 255.0, alpha: 1)
+    class func n1BlueColor() -> UIColor {
+        return UIColor(red: 38.0 / 255.0, green: 94.0 / 255.0, blue: 105.0 / 255.0, alpha: 1)
+    }
+    
+    class func n1GrayColor() -> UIColor {
+        return UIColor(red: 110.0 / 255.0, green: 118.0 / 255.0, blue: 127.0 / 255.0, alpha: 1)
     }
     
     class func n1BrandRedColor() -> UIColor {
@@ -49,23 +53,23 @@ extension UIColor {
     }
     
     class func n1DarkerGreyColor() -> UIColor {
-        return UIColor(red: 69.0 / 255.0, green: 90.0 / 255.0, blue: 100.0 / 255.0, alpha: 1)
+        return UIColor(red: 67.0 / 255.0, green: 76.0 / 255.0, blue: 87.0 / 255.0, alpha: 1.0)
     }
     
     class func n1LightGreyColor() -> UIColor {
-        return UIColor(red: 207.0 / 255.0, green: 216.0 / 255.0, blue: 220.0 / 255.0, alpha: 1)
+        return UIColor(red: 177.0 / 255.0, green: 177.0 / 255.0, blue: 177.0 / 255.0, alpha: 1)
     }
     
     class func n1LighterGreyColor() -> UIColor {
-        return UIColor(red: 233.0 / 255.0, green: 239.0 / 255.0, blue: 242.0 / 255.0, alpha: 1)
+        return UIColor.init(red: 187.0/255.0, green: 197.0/255.0, blue: 202.0/255.0, alpha: 1)
     }
     
-    class func n1PaleGreyColor() -> UIColor {
-        return UIColor(red: 243.0 / 255.0, green: 247.0 / 255.0, blue: 249.0 / 255.0, alpha: 1)
+    class func n1WhiteColor() -> UIColor {
+        return UIColor(red: 255.0 / 255.0, green: 255.0 / 255.0, blue: 255.0 / 255.0, alpha: 1)
     }
     
     class func n1Black50Color() -> UIColor { 
-        return UIColor(white: 0.0, alpha: 0.5)
+        return UIColor.init(red: 233.0/255.0, green: 233.0/255.0, blue: 233.0/255.0, alpha: 1)
     }
 
     class func colorFromRGB(_ rgbHexValue: UInt) -> UIColor {

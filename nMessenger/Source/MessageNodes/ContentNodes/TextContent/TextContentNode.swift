@@ -20,7 +20,7 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
 
     // MARK: Public Variables
     /** Insets for the node */
-    open var insets = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10) {
+    open var insets = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 10) {
         didSet {
             setNeedsLayout()
         }
@@ -38,13 +38,13 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
         }
     }
     /** UIColor for incoming text messages*/
-    open var incomingTextColor = UIColor.n1DarkestGreyColor() {
+    open var incomingTextColor = UIColor.n1DarkerGreyColor() {
         didSet {
             self.updateAttributedText()
         }
     }
     /** UIColor for outgoinf text messages*/
-    open var outgoingTextColor = UIColor.n1WhiteColor() {
+    open var outgoingTextColor = UIColor.n1DarkerGreyColor() {
         didSet {
             self.updateAttributedText()
         }
@@ -69,6 +69,14 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
                 self.updateAttributedText()
             } else {
                 self.backgroundBubble?.bubbleColor = self.bubbleConfiguration.getOutgoingColor()
+                self.updateAttributedText()
+            }
+        }
+    }
+    
+    open override var state:ContentNodeState {
+        didSet {
+            if state != .none{
                 self.updateAttributedText()
             }
         }
@@ -118,7 +126,7 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
         textMessageNode.delegate = self
         textMessageNode.isUserInteractionEnabled = true
         textMessageNode.linkAttributeNames = ["LinkAttribute","PhoneNumberAttribute"]
-        let fontAndSizeAndTextColor = [ NSAttributedStringKey.font: self.isIncomingMessage ? incomingTextFont : outgoingTextFont, NSAttributedStringKey.foregroundColor: self.isIncomingMessage ? incomingTextColor : outgoingTextColor]
+        let fontAndSizeAndTextColor = [ NSAttributedStringKey.font: self.isIncomingMessage ? incomingTextFont : outgoingTextFont, NSAttributedStringKey.foregroundColor: state == .none ? (self.isIncomingMessage ? incomingTextColor : outgoingTextColor) : UIColor.n1WhiteColor()]
         let outputString = NSMutableAttributedString(string: textMessageString, attributes: fontAndSizeAndTextColor )
         let types: NSTextCheckingResult.CheckingType = [.link, .phoneNumber]
         let detector = try! NSDataDetector(types: types.rawValue)
@@ -140,6 +148,7 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
         self.textMessageNode.attributedText = outputString
         self.textMessageNode.accessibilityIdentifier = "labelMessage"
         self.textMessageNode.isAccessibilityElement = true
+        
         self.addSubnode(textMessageNode)
     }
     
@@ -147,7 +156,14 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
     /** Updates the attributed string to the correct incoming/outgoing settings and lays out the component again*/
     fileprivate func updateAttributedText() {
         let tmpString = NSMutableAttributedString(attributedString: self.textMessageNode.attributedText!)
-        tmpString.addAttributes([NSAttributedStringKey.foregroundColor: isIncomingMessage ? incomingTextColor : outgoingTextColor, NSAttributedStringKey.font: isIncomingMessage ? incomingTextFont : outgoingTextFont], range: NSMakeRange(0, tmpString.length))
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = state == .none ? .left : .center
+        paragraphStyle.lineBreakMode = .byWordWrapping
+
+        let attributes = [NSAttributedStringKey.foregroundColor: state == .none ? (isIncomingMessage ? incomingTextColor : outgoingTextColor) : UIColor.n1WhiteColor(),
+                         NSAttributedStringKey.font: isIncomingMessage ? incomingTextFont : outgoingTextFont,
+                         NSAttributedStringKey.paragraphStyle : paragraphStyle]
+        tmpString.addAttributes(attributes, range: NSMakeRange(0, tmpString.length))
         self.textMessageNode.attributedText = tmpString
         
         setNeedsLayout()
@@ -159,17 +175,22 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
      Overriding layoutSpecThatFits to specifiy relatiohsips between elements in the cell
      */
     override open func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let width = constrainedSize.max.width - self.insets.left - self.insets.right
-        
-        textMessageNode.style.maxWidth = ASDimension(unit: .points, value: width)
-        textMessageNode.style.maxHeight = ASDimension(unit: .fraction, value: 1)
-        
-        let textMessageSize = ASAbsoluteLayoutSpec()
-        textMessageSize.sizing = .sizeToFit
-        textMessageSize.children = [self.textMessageNode]
-        
-        return  ASInsetLayoutSpec(insets: insets, child: textMessageSize)
-        
+        if state == .none{
+            let width = constrainedSize.max.width - self.insets.left - self.insets.right
+            
+            textMessageNode.style.maxWidth = ASDimension(unit: .points, value: width)
+            textMessageNode.style.maxHeight = ASDimension(unit: .fraction, value: 1)
+            
+            let textMessageSize = ASAbsoluteLayoutSpec()
+            textMessageSize.sizing = .sizeToFit
+            textMessageSize.children = [self.textMessageNode]
+            return  ASInsetLayoutSpec(insets: insets, child: textMessageSize)
+        }
+        else{
+            let stack = ASStackLayoutSpec(direction: .vertical, spacing: 0, justifyContent: .center, alignItems: .center, children:[self.textMessageNode])
+            stack.style.width = ASDimensionMake(constrainedSize.max.width)
+            return  ASInsetLayoutSpec(insets: insets, child: stack)
+        }
     }
     
     // MARK: ASTextNodeDelegate
