@@ -51,7 +51,7 @@ open class MessageNode: GeneralMessengerCell {
     /**
      Spacing around the avatar. Defaults to UIEdgeInsetsMake(0, 0, 0, 10)
      */
-    open var avatarInsets: UIEdgeInsets = UIEdgeInsetsMake(-22, 0, 0, 6) {
+    open var avatarInsets: UIEdgeInsets = UIEdgeInsets(top: -22, left: 0, bottom: 0, right: 6) {
         didSet {
             self.setNeedsLayout()
         }
@@ -201,12 +201,12 @@ open class MessageNode: GeneralMessengerCell {
         if let headerNode = self.headerNode
         {
 //            headerNode.style.height = ASDimension(unit: .points, value: 30)
-            let ins = ASInsetLayoutSpec(insets: UIEdgeInsetsMake(0, 38, 0, 0), child: headerNode)
+            let ins = ASInsetLayoutSpec(insets: UIEdgeInsets(top: 0, left: 38, bottom: 0, right: 0), child: headerNode)
             layoutSpecs = ASStackLayoutSpec(direction: .vertical, spacing: self.headerSpacing, justifyContent: .start, alignItems: isIncomingMessage ? .start : .end, children: [isIncomingMessage ? ins : headerNode, layoutSpecs])
         }
         
         if let footerNode = self.footerNode {
-            let ins = ASInsetLayoutSpec(insets: UIEdgeInsetsMake(0, 38, 0, 0), child: footerNode)
+            let ins = ASInsetLayoutSpec(insets: UIEdgeInsets(top: 0, left: 38, bottom: 0, right: 0), child: footerNode)
             layoutSpecs = ASStackLayoutSpec(direction: .vertical, spacing: self.footerSpacing, justifyContent: .start, alignItems: isIncomingMessage ? .start : .end, children: [layoutSpecs, isIncomingMessage ? ins : footerNode])
         }
         

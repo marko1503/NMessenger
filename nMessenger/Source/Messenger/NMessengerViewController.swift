@@ -101,7 +101,7 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
      Adds observer for UIKeyboardWillChangeFrameNotification
      */
     fileprivate func addObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(NMessengerViewController.keyboardNotification(_:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(NMessengerViewController.keyboardNotification(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     /**
      Removes observer for UIKeyboardWillChangeFrameNotification
@@ -125,7 +125,7 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
         setUpConstraintsForViews()
         //swipe down
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(NMessengerViewController.respondToSwipeGesture(_:)))
-        swipeDown.direction = UISwipeGestureRecognizerDirection.down
+        swipeDown.direction = UISwipeGestureRecognizer.Direction.down
         self.inputBarView.textInputAreaView.addGestureRecognizer(swipeDown)
     }
     
@@ -140,7 +140,7 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
     fileprivate func loadMessengerView() {
         self.messengerView = NMessenger(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height - 63))
         messengerView.delegate = self
-        self.messengerView.messengerNode.contentInset = UIEdgeInsetsMake(0, 0, 63, 0)
+        self.messengerView.messengerNode.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 63, right: 0)
         self.view.addSubview(self.messengerView)
     }
     /**
@@ -215,11 +215,11 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
      */
     @objc func keyboardNotification(_ notification: Notification) {
         if let userInfo = (notification as NSNotification).userInfo {
-            let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-            let duration:TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-            let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
-            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions().rawValue
-            let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
+            let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            let duration:TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIView.AnimationOptions().rawValue
+            let animationCurve:UIView.AnimationOptions = UIView.AnimationOptions(rawValue: animationCurveRaw)
             if endFrame?.origin.y >= UIScreen.main.bounds.size.height {
                 self.inputBarBottomSpacing.constant = 0
                 self.isKeyboardIsShown = false
@@ -378,8 +378,8 @@ open class NMessengerViewController: UIViewController, UITextViewDelegate, NMess
     open func createTextMessage(_ text: String, isIncomingMessage:Bool, state: ContentNodeState = .none) -> GeneralMessengerCell {
         let textContent = TextContentNode(textMessageString: text, currentViewController: self, bubbleConfiguration: self.sharedBubbleConfiguration)
         let newMessage = MessageNode(content: textContent)
-        let fontAndSizeAndTextColor = [ NSAttributedStringKey.font: UIFont.n1TextStyle3MiniFont(),
-                                        NSAttributedStringKey.foregroundColor: UIColor.n1LightGreyColor()]
+        let fontAndSizeAndTextColor = [ NSAttributedString.Key.font: UIFont.n1TextStyle3MiniFont(),
+                                        NSAttributedString.Key.foregroundColor: UIColor.n1LightGreyColor()]
         if isIncomingMessage{
             let avatar = ASImageNode()
             avatar.backgroundColor = UIColor.lightGray

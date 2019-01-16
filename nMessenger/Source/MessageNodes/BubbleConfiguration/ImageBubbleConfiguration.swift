@@ -52,7 +52,7 @@ open class ImageBubbleConfiguration: BubbleConfigurationProtocol {
     {
         let newBubble = ImageBubble()
         newBubble.bubbleImage = UIImage(named: "MessageBubble", in: Bundle(for: NMessengerViewController.self), compatibleWith: nil)
-        newBubble.cutInsets = UIEdgeInsetsMake(29, 32, 25, 43)
+        newBubble.cutInsets = UIEdgeInsets(top: 29, left: 32, bottom: 25, right: 43)
         newBubble.hasLayerMask = isMasked
         return newBubble
     }
@@ -61,7 +61,7 @@ open class ImageBubbleConfiguration: BubbleConfigurationProtocol {
     {
         let newBubble = ImageBubble()
         newBubble.bubbleImage = UIImage(named: "MessageBubble", in: Bundle(for: NMessengerViewController.self), compatibleWith: nil)
-        newBubble.cutInsets = UIEdgeInsetsMake(29, 32, 25, 43)
+        newBubble.cutInsets = UIEdgeInsets(top: 29, left: 32, bottom: 25, right: 43)
         newBubble.hasLayerMask = isMasked
         return newBubble
     }

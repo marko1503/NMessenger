@@ -14,7 +14,7 @@ class UIColorTests: XCTestCase {
         XCTAssertNotNil(UIColor.n1WhiteColor())
         XCTAssertNotNil(UIColor.n1MidGreyColor())
         XCTAssertNotNil(UIColor.n1BrandRedColor())
-        XCTAssertNotNil(UIColor.n1DarkGreyColor())
+//        XCTAssertNotNil(UIColor.n1DarkGreyColor())
         XCTAssertNotNil(UIColor.n1WhiteColor())
         XCTAssertNotNil(UIColor.n1LightGreyColor())
         XCTAssertNotNil(UIColor.n1ActionBlueColor())

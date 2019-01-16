@@ -126,7 +126,7 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
         textMessageNode.delegate = self
         textMessageNode.isUserInteractionEnabled = true
         textMessageNode.linkAttributeNames = ["LinkAttribute","PhoneNumberAttribute"]
-        let fontAndSizeAndTextColor = [ NSAttributedStringKey.font: self.isIncomingMessage ? incomingTextFont : outgoingTextFont, NSAttributedStringKey.foregroundColor: state == .none ? (self.isIncomingMessage ? incomingTextColor : outgoingTextColor) : UIColor.n1WhiteColor()]
+        let fontAndSizeAndTextColor = [ NSAttributedString.Key.font: self.isIncomingMessage ? incomingTextFont : outgoingTextFont, NSAttributedString.Key.foregroundColor: state == .none ? (self.isIncomingMessage ? incomingTextColor : outgoingTextColor) : UIColor.n1WhiteColor()]
         let outputString = NSMutableAttributedString(string: textMessageString, attributes: fontAndSizeAndTextColor )
         let types: NSTextCheckingResult.CheckingType = [.link, .phoneNumber]
         let detector = try! NSDataDetector(types: types.rawValue)
@@ -134,15 +134,15 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
         for match in matches {
             if let url = match.url
             {
-                outputString.addAttribute(NSAttributedStringKey(rawValue: "LinkAttribute"), value: url, range: match.range)
-                outputString.addAttribute(NSAttributedStringKey.underlineStyle, value: NSUnderlineStyle.styleSingle.rawValue, range: match.range)
-                outputString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.blue, range: match.range)
+                outputString.addAttribute(NSAttributedString.Key(rawValue: "LinkAttribute"), value: url, range: match.range)
+                outputString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: match.range)
+                outputString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.blue, range: match.range)
             }
             if let phoneNumber = match.phoneNumber
             {
-                outputString.addAttribute(NSAttributedStringKey(rawValue: "PhoneNumberAttribute"), value: phoneNumber, range: match.range)
-                outputString.addAttribute(NSAttributedStringKey.underlineStyle, value: NSUnderlineStyle.styleSingle.rawValue, range: match.range)
-                outputString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.blue, range: match.range)
+                outputString.addAttribute(NSAttributedString.Key(rawValue: "PhoneNumberAttribute"), value: phoneNumber, range: match.range)
+                outputString.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: match.range)
+                outputString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.blue, range: match.range)
             }
         }
         self.textMessageNode.attributedText = outputString
@@ -160,9 +160,9 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
         paragraphStyle.alignment = state == .none ? .left : .center
         paragraphStyle.lineBreakMode = .byWordWrapping
 
-        let attributes = [NSAttributedStringKey.foregroundColor: state == .none ? (isIncomingMessage ? incomingTextColor : outgoingTextColor) : UIColor.n1WhiteColor(),
-                         NSAttributedStringKey.font: isIncomingMessage ? incomingTextFont : outgoingTextFont,
-                         NSAttributedStringKey.paragraphStyle : paragraphStyle]
+        let attributes = [NSAttributedString.Key.foregroundColor: state == .none ? (isIncomingMessage ? incomingTextColor : outgoingTextColor) : UIColor.n1WhiteColor(),
+                          NSAttributedString.Key.font: isIncomingMessage ? incomingTextFont : outgoingTextFont,
+                          NSAttributedString.Key.paragraphStyle : paragraphStyle]
         tmpString.addAttributes(attributes, range: NSMakeRange(0, tmpString.length))
         self.textMessageNode.attributedText = tmpString
         
@@ -237,14 +237,14 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
                 if let tmpString = self.textMessageNode.attributedText
                 {
                     let attributedString =  NSMutableAttributedString(attributedString: tmpString)
-                    attributedString.addAttribute(NSAttributedStringKey.backgroundColor, value: UIColor.lightGray, range: textRange)
+                    attributedString.addAttribute(NSAttributedString.Key.backgroundColor, value: UIColor.lightGray, range: textRange)
                     self.textMessageNode.attributedText = attributedString
                     UIApplication.shared.openURL(value as! URL)
                     delay(0.4) {
                         if let tmpString = self.textMessageNode.attributedText
                         {
                             let attributedString =  NSMutableAttributedString(attributedString: tmpString)
-                            attributedString.removeAttribute(NSAttributedStringKey.backgroundColor, range: textRange)
+                            attributedString.removeAttribute(NSAttributedString.Key.backgroundColor, range: textRange)
                             self.textMessageNode.attributedText = attributedString
                         }
                     }
@@ -285,7 +285,7 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
             if let tmpString = self.textMessageNode.attributedText
             {
                 let attributedString =  NSMutableAttributedString(attributedString: tmpString)
-                attributedString.addAttribute(NSAttributedStringKey.backgroundColor, value: UIColor.lightGray, range: textRange)
+                attributedString.addAttribute(NSAttributedString.Key.backgroundColor, value: UIColor.lightGray, range: textRange)
                 self.textMessageNode.attributedText = attributedString
 
                 let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -327,7 +327,7 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
                 if let tmpString = self.textMessageNode.attributedText
                 {
                     let attributedString =  NSMutableAttributedString(attributedString: tmpString)
-                    attributedString.removeAttribute(NSAttributedStringKey.backgroundColor, range: textRange)
+                    attributedString.removeAttribute(NSAttributedString.Key.backgroundColor, range: textRange)
                     self.textMessageNode.attributedText = attributedString
                 }
             }
@@ -339,7 +339,7 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
             if let tmpString = self.textMessageNode.attributedText
             {
                 let attributedString =  NSMutableAttributedString(attributedString: tmpString)
-                attributedString.addAttribute(NSAttributedStringKey.backgroundColor, value: UIColor.lightGray, range: textRange)
+                attributedString.addAttribute(NSAttributedString.Key.backgroundColor, value: UIColor.lightGray, range: textRange)
                 self.textMessageNode.attributedText = attributedString
                 let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                 
@@ -393,7 +393,7 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
                 if let tmpString = self.textMessageNode.attributedText
                 {
                     let attributedString =  NSMutableAttributedString(attributedString: tmpString)
-                    attributedString.removeAttribute(NSAttributedStringKey.backgroundColor, range: textRange)
+                    attributedString.removeAttribute(NSAttributedString.Key.backgroundColor, range: textRange)
                     self.textMessageNode.attributedText = attributedString
                 }
             }
@@ -420,7 +420,7 @@ open class TextContentNode: ContentNode,ASTextNodeDelegate {
      Override method from superclass
      */
     open override func messageNodeLongPressSelector(_ recognizer: UITapGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.began {
+        if recognizer.state == UIGestureRecognizer.State.began {
             let touchLocation = recognizer.location(in: view)
             if self.textMessageNode.frame.contains(touchLocation) {
                 becomeFirstResponder()

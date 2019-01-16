@@ -23,7 +23,7 @@ open class MessageSentIndicator: GeneralMessengerCell {
         }
     }
     /** Loading text node*/
-    open let text = ASTextNode()
+    public let text = ASTextNode()
 
     /** Sets the loading attributed text for the spinner. Defaults to *"Loading..."* */
     open var messageSentAttributedText:NSAttributedString? {
@@ -46,9 +46,9 @@ open class MessageSentIndicator: GeneralMessengerCell {
             text.attributedText = NSAttributedString(
                 string: newValue != nil ? newValue! : "",
                 attributes: [
-                    NSAttributedStringKey.font: UIFont.n1CaptionFont(),
-                    NSAttributedStringKey.foregroundColor: UIColor.n1LightGreyColor(),
-                    NSAttributedStringKey.kern: -0.3
+                    NSAttributedString.Key.font: UIFont.n1CaptionFont(),
+                    NSAttributedString.Key.foregroundColor: UIColor.n1LightGreyColor(),
+                    NSAttributedString.Key.kern: -0.3
                 ])
             self.setNeedsLayout()
         } get {

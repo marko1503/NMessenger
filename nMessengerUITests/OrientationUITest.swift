@@ -22,29 +22,30 @@ class OrientationUITest: XCTestCase {
 
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
         
-        XCUIDevice.shared().orientation = .portrait
+        XCUIDevice.shared.orientation = .portrait
     }
     
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
         
-        XCUIDevice.shared().orientation = .portrait
+        XCUIDevice.shared.orientation = .portrait
     }
     
     func testSPSCLaunchScreenLandscape() {
 
-        XCUIDevice.shared().orientation = .landscapeLeft
+        XCUIDevice.shared.orientation = .landscapeLeft
+
+
+        XCTAssert(UIApplication.shared.statusBarOrientation.isPortrait)
         
-        XCTAssert(UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation))
+        XCUIDevice.shared.orientation = .landscapeRight
         
-        XCUIDevice.shared().orientation = .landscapeRight
+        XCTAssert(UIApplication.shared.statusBarOrientation.isPortrait)
         
-        XCTAssert(UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation))
+        XCUIDevice.shared.orientation = .portrait
         
-        XCUIDevice.shared().orientation = .portrait
-        
-        XCTAssert(UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation))
+        XCTAssert(UIApplication.shared.statusBarOrientation.isPortrait)
         
     }
     
